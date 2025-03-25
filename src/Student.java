@@ -25,10 +25,18 @@ public abstract class Student {
 		return id;
 	}
 	
+	private double get_grade_point_average() {
+		double grade_sum = 0.0d;
+		for(int grades: grades) {
+			grade_sum += grades;
+		}
+		return grade_sum / this.grades.size();
+		
+	}
 	public abstract String do_skill();
 	
 	@Override
 	public String toString() {
-		return "Name: " + this.name + ", Surname: " + this.surname + ", date of birth: " + this.date_of_birth + ", id: " + this.id;
+		return "Name: " + this.name + ", Surname: " + this.surname + ", date of birth: " + this.date_of_birth + ", id: " + this.id + ", grade point average: " + this.get_grade_point_average();
 	}
 }
