@@ -8,6 +8,7 @@ public class Database {
 	}
 	
 	public void add_student(String name, String surname, String date_of_birth, int id, Specialization s) {
+		
 		switch(s) {
 		case CyberSecurity:
 			students.add(new CyberSecurityStudent(name, surname, date_of_birth, id));
@@ -19,16 +20,22 @@ public class Database {
 		}
 	}
 	
-	public void remove_student(int id) {
+	public Student get_student(int id){
 		Student wanted_student = null;
+		
 		for(Student student: students) {
 			if(id == student.get_id()) {
 				wanted_student = student;
-				break;
+				break;	
 			}
 		}
-		if(wanted_student != null) {
-			this.students.remove(wanted_student);
-		}
+		return wanted_student;
+	}
+	
+	public void remove_student(int id) {
+		Student student = this.get_student(id);
+	
+		if(student != null)
+			this.students.remove(student);
 	}
 }

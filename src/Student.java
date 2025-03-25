@@ -2,9 +2,9 @@ import java.util.ArrayList;
 
 public abstract class Student {
 	
-	private String name;
-	private String surname;
-	private String date_of_birth;
+	protected String name;
+	protected String surname;
+	protected String date_of_birth;
 	private int id;
 	private ArrayList<Integer> grades;
 	public static int addId;
