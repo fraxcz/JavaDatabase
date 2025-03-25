@@ -33,11 +33,13 @@ public class TelecommunicationStudent extends Student {
 		String aux = "";
 		for(char ch: this.name.toUpperCase().toCharArray()) {
 			aux += this.morse_code.get(ch);
+			aux += "|";
 		}
 		aux += " ";
 		
 		for(char ch: this.surname.toUpperCase().toCharArray()) {
 			aux += this.morse_code.get(ch);
+			aux += "|";
 		}
 		return aux;
 	}
