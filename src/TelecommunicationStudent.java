@@ -30,12 +30,12 @@ public class TelecommunicationStudent extends Student {
 	
 	@Override
 	public String do_skill() {
-		String aux = "";
-		for(char ch: this.name.toUpperCase().toCharArray()) {
+		String aux = "|";
+		for(char ch: this.first_name.toUpperCase().toCharArray()) {
 			aux += this.morse_alphabet.get(ch);
 			aux += "|";
 		}
-		aux += " ";
+		aux += " |";
 		
 		for(char ch: this.surname.toUpperCase().toCharArray()) {
 			aux += this.morse_alphabet.get(ch);

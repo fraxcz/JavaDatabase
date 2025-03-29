@@ -7,15 +7,15 @@ public class Database {
 		this.students = new ArrayList<>();
 	}
 	
-	public void add_student(String name, String surname, String date_of_birth, int id, Specialization s) {
+	public void add_student(String name, String surname, String date_of_birth, Specialization s) {
 		
 		switch(s) {
 		case CyberSecurity:
-			students.add(new CyberSecurityStudent(name, surname, date_of_birth, id));
+			students.add(new CyberSecurityStudent(name, surname, date_of_birth, this.students.size()));
 			break;
 			
 		case Telecom:
-			students.add(new TelecommunicationStudent(name, surname, date_of_birth, id));
+			students.add(new TelecommunicationStudent(name, surname, date_of_birth, this.students.size()));
 			break;
 		}
 	}
@@ -34,8 +34,18 @@ public class Database {
 	
 	public void remove_student(int id) {
 		Student student = this.get_student(id);
-	
 		if(student != null)
 			this.students.remove(student);
+		//TODO: dodělat toto
+	}
+	
+	@Override
+	public String toString() {
+		String aux = "";
+		
+		for(Student student: this.students) {
+			aux += student.toString() + "\n";
+		}
+		return aux;
 	}
 }

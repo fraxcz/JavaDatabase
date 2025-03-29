@@ -2,15 +2,15 @@ import java.util.ArrayList;
 
 public abstract class Student {
 	
-	protected String name;
+	protected String first_name;
 	protected String surname;
 	protected String date_of_birth;
 	private int id;
 	private ArrayList<Integer> grades;
 	public static int addId;
 	
-	public Student(String name, String surname, String date_of_birth, int id) {
-		this.name = name;
+	public Student(String first_name, String surname, String date_of_birth, int id) {
+		this.first_name = first_name;
 		this.surname = surname;
 		this.date_of_birth = date_of_birth;
 		this.id = id;
@@ -37,6 +37,6 @@ public abstract class Student {
 	
 	@Override
 	public String toString() {
-		return "Name: " + this.name + ", Surname: " + this.surname + ", date of birth: " + this.date_of_birth + ", id: " + this.id + ", grade point average: " + this.get_grade_point_average();
+		return "first name: " + this.first_name + ", surname: " + this.surname + ", date of birth: " + this.date_of_birth + ", id: " + this.id + ", grade point average: " + this.get_grade_point_average();
 	}
 }
