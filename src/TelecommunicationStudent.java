@@ -2,8 +2,8 @@ import java.util.HashMap;
 public class TelecommunicationStudent extends Student {
 
 	HashMap<Character, String> morse_alphabet = new HashMap<>();
-	public TelecommunicationStudent(String name, String surname, String date_of_birth, int id) {
-		super(name, surname, date_of_birth, id);
+	public TelecommunicationStudent(String name, String surname, String date_of_birth) {
+		super(name, surname, date_of_birth);
 		this.fill_morse_alphabet();
 	}
 	

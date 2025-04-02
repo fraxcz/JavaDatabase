@@ -4,8 +4,8 @@ import java.security.NoSuchAlgorithmException;
 
 public class CyberSecurityStudent extends Student {
 
-	public CyberSecurityStudent(String first_name, String surname, String date_of_birth, int id) {
-		super(first_name, surname, date_of_birth, id);
+	public CyberSecurityStudent(String first_name, String surname, String date_of_birth) {
+		super(first_name, surname, date_of_birth);
 	}
 
 	@Override
