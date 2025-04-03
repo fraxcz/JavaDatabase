@@ -25,7 +25,7 @@ public class CyberSecurityStudent extends Student {
 
 	@Override
 	public String toString() {
-		return super.toString() + ", specialization: Cybersecurity";
+		return super.toString() + ", specialization: Cybersecurity.";
 	}
 	
 }

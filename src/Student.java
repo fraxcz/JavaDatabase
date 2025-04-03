@@ -1,12 +1,11 @@
 import java.util.ArrayList;
 
-public abstract class Student{
+public abstract class Student implements Comparable<Student>{
 	
 	protected String first_name;
 	protected String surname;
 	protected String date_of_birth;
 	private ArrayList<Integer> grades;
-	public static int addId;
 	
 	public Student(String first_name, String surname, String date_of_birth){
 		this.first_name = first_name;
@@ -18,8 +17,9 @@ public abstract class Student{
 	public void addGrade(int grade) {
 		grades.add(grade);
 	}
+	
 
-	private double get_grade_point_average() {
+	public double get_grade_point_average() {
 		double grade_sum = 0.0d;
 		for(int grades: grades) {
 			grade_sum += grades;
@@ -28,6 +28,11 @@ public abstract class Student{
 		
 	}
 	public abstract String do_skill();
+	
+	@Override
+	public int compareTo(Student o) {
+		return this.surname.compareTo(o.surname);
+	}
 
 	@Override
 	public String toString() {

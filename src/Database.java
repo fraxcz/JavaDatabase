@@ -25,6 +25,7 @@ public class Database {
 		for(Student student: this.students) {
 			if (specialization == Specialization.CyberSecurity && student instanceof CyberSecurityStudent) {
 	            count++;
+	            
 	        } else if (specialization == Specialization.Telecom && student instanceof TelecommunicationStudent) {
 	            count++;
 	        }
@@ -38,6 +39,23 @@ public class Database {
 			return "Wrong id.";
 		
 		return student.do_skill();
+	}
+	
+	public double get_average_of_specialization(Specialization specialization) {
+		
+		double sum = 0;
+		int count = 0;
+		for(Student student: this.students) {
+			if (specialization == Specialization.CyberSecurity && student instanceof CyberSecurityStudent) {
+	            sum += student.get_grade_point_average();
+	            count++;
+	            
+	        } else if (specialization == Specialization.Telecom && student instanceof TelecommunicationStudent) {
+	        	sum += student.get_grade_point_average();
+	        	count++;
+	        }
+		}
+		return sum / count;
 	}
 	
 	public boolean add_grade(int id, int grade) {
@@ -68,9 +86,14 @@ public class Database {
 	}
 	
 	public String toStringSorted() {
-		//TODO: dodelat
+		String aux = "";
+		ArrayList<Student> studentsSorted = new ArrayList<>(this.students);
+		studentsSorted.sort(null);
 		
-		return "";
+		for(Student student: studentsSorted) {
+			aux += "id: " + this.students.indexOf(student) + ", " + student.toString() + "\n";
+		}
+		return aux;
 	}
 	
 	@Override
