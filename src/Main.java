@@ -20,6 +20,12 @@ public class Main {
 		System.out.println(my_database.toStringSorted());
 		System.out.println(my_database.get_average_of_specialization(Specialization.CyberSecurity));
 		System.out.println(my_database);
+		System.out.println(my_database.get_student(0));
+		my_database.writeToAFile("output.txt");
+		System.out.println("\n 2nd database:");
+		Database database2 = new Database();
+		database2.readFromAFile("output.txt");
+		System.out.println(database2);
 		
 	}
 

@@ -5,6 +5,7 @@ public abstract class Student implements Comparable<Student>{
 	protected String first_name;
 	protected String surname;
 	protected String date_of_birth;
+	protected Specialization spec;
 	private ArrayList<Integer> grades;
 	
 	public Student(String first_name, String surname, String date_of_birth){
@@ -28,6 +29,18 @@ public abstract class Student implements Comparable<Student>{
 		
 	}
 	public abstract String do_skill();
+	
+	public String getAttributes() {
+		String aux = this.first_name + " " + this.surname + " " + this.date_of_birth + " " + this.spec + " [";
+		
+		for(int grade : this.grades) {
+			aux += grade;
+			if(this.grades.size() - 1 > this.grades.indexOf(grade))
+				aux += ",";
+		}
+		aux += "]\n";
+		return aux;
+	}
 	
 	@Override
 	public int compareTo(Student o) {

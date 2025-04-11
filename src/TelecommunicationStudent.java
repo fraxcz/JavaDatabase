@@ -4,6 +4,7 @@ public class TelecommunicationStudent extends Student {
 	HashMap<Character, String> morse_alphabet = new HashMap<>();
 	public TelecommunicationStudent(String name, String surname, String date_of_birth) {
 		super(name, surname, date_of_birth);
+		this.spec = Specialization.Telecom;
 		this.fill_morse_alphabet();
 	}
 	

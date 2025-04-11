@@ -1,10 +1,19 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
-
 public class Database {
 	private ArrayList<Student> students;
 	
 	public Database() {
 		this.students = new ArrayList<>();
+	}
+	
+	public Database(String path) {
+		this.students = new ArrayList<>();
+		this.readFromAFile(path);
 	}
 	
 	public void add_student(String name, String surname, String date_of_birth, Specialization s) {
@@ -94,6 +103,56 @@ public class Database {
 			aux += "id: " + this.students.indexOf(student) + ", " + student.toString() + "\n";
 		}
 		return aux;
+	}
+	public void writeToAFile(String path) {
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter(path));
+			for(Student student: this.students) {
+				writer.write(student.getAttributes());
+				}
+			writer.close();
+			System.out.println("Succesfully saved a database to " + path);
+		}
+			catch(IOException e) {
+				System.out.println(e.getMessage());
+			}
+	}
+
+	public void readFromAFile(String path) {
+		try {
+			String line;
+			String lineSplit[];
+			String grades[];
+			BufferedReader reader = new BufferedReader(new FileReader(path));
+			
+			while((line = reader.readLine()) != null) {
+				
+				line = line.replaceAll("[\\[\\]]", "");
+				lineSplit = line.split(" ");
+				grades = lineSplit[4].split(",");
+				
+				switch(lineSplit[3]) {
+				case "CyberSecurity":
+					Student studentC = new CyberSecurityStudent(lineSplit[0], lineSplit[1], lineSplit[2]);
+					for(String grade: grades)
+						studentC.addGrade(Integer.parseInt(grade));
+					this.students.add(studentC);
+					break;
+					
+				case "Telecom":
+					Student studentT = new TelecommunicationStudent(lineSplit[0], lineSplit[1], lineSplit[2]);
+					
+					for(String grade: grades)
+						studentT.addGrade(Integer.parseInt(grade));
+					this.students.add(studentT);
+					break;
+				}
+			}
+			reader.close();
+		}
+		catch(IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
