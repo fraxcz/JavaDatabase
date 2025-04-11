@@ -104,14 +104,12 @@ public class Database {
 		}
 		return aux;
 	}
-	public void writeToAFile(String path) {
+	public void writeToAFile(int id, String path) {
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(path));
-			for(Student student: this.students) {
-				writer.write(student.getAttributes());
-				}
+			writer.write(this.students.get(id).getAttributes());
 			writer.close();
-			System.out.println("Succesfully saved a database to " + path);
+			System.out.println("Succesfully saved a student to " + path);
 		}
 			catch(IOException e) {
 				System.out.println(e.getMessage());
@@ -152,6 +150,9 @@ public class Database {
 		}
 		catch(IOException e) {
 			e.printStackTrace();
+		}
+		catch(IndexOutOfBoundsException e) {
+			System.out.println("Could't load every student in a file, missing arguments !");
 		}
 	}
 	
