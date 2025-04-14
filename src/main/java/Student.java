@@ -38,7 +38,7 @@ public abstract class Student implements Comparable<Student>{
 			if(this.grades.size() - 1 > this.grades.indexOf(grade))
 				aux += ",";
 		}
-		aux += "]\n";
+		aux += "]";
 		return aux;
 	}
 	

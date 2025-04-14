@@ -107,12 +107,12 @@ public class Database {
 	public void writeToAFile(int id, String path) {
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(path));
-			writer.write(this.students.get(id).getAttributes());
+			writer.write(this.students.get(id).getAttributes() + "\n");
 			writer.close();
 			System.out.println("Succesfully saved a student to " + path);
 		}
 			catch(IOException e) {
-				System.out.println(e.getMessage());
+				e.printStackTrace();
 			}
 	}
 
@@ -130,6 +130,7 @@ public class Database {
 				grades = lineSplit[4].split(",");
 				
 				switch(lineSplit[3]) {
+				
 				case "CyberSecurity":
 					Student studentC = new CyberSecurityStudent(lineSplit[0], lineSplit[1], lineSplit[2]);
 					for(String grade: grades)
