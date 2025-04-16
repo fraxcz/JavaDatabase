@@ -1,8 +1,9 @@
 import java.util.HashMap;
+import java.time.LocalDate;
 public class TelecommunicationStudent extends Student {
 
 	HashMap<Character, String> morse_alphabet = new HashMap<>();
-	public TelecommunicationStudent(String name, String surname, String date_of_birth) {
+	public TelecommunicationStudent(String name, String surname, LocalDate date_of_birth) {
 		super(name, surname, date_of_birth);
 		this.spec = Specialization.Telecom;
 		this.fill_morse_alphabet();
@@ -32,7 +33,7 @@ public class TelecommunicationStudent extends Student {
 	@Override
 	public String do_skill() {
 		String aux = "|";
-		for(char ch: this.first_name.toUpperCase().toCharArray()) {
+		for(char ch: this.firstName.toUpperCase().toCharArray()) {
 			aux += this.morse_alphabet.get(ch);
 			aux += "|";
 		}

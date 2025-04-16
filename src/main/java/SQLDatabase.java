@@ -1,4 +1,5 @@
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -33,53 +34,57 @@ public class SQLDatabase {
 		}
 	}
 	
-	public boolean selectFromTable() {
+	public ResultSet getStudentsAndGrades() throws SQLException{
 		if(conn == null)
-			return false;
+			return null;
+
+		String sql = "SELECT *, GROUP_CONCAT(grades.grade) AS grades FROM students LEFT JOIN grades ON grades.student_id = students.id GROUP BY students.id;";
+		Statement stm = conn.createStatement();
+		ResultSet rsStudent = stm.executeQuery(sql);
+		return rsStudent;
+
+	}
+	
+	public void insertStudent(String name, String surname, LocalDate date, Specialization specialization, ArrayList<Integer> grades) throws SQLException {
+		if(conn == null)
+			throw new SQLException("Connection was not estabilished.");
 		
-		String sql = "SELECT * FROM students";
-		try(Statement stm = conn.createStatement()){
-			ResultSet rs = stm.executeQuery(sql);
-			while(rs.next()) {
-				System.out.println(rs.getString("name") + " " + rs.getString("surname") + " " + rs.getDate("birthdate") + "\n");
+		String sql = "INSERT INTO students(name,surname,birthdate,specialization) VALUES(?,?,?,?)";
+			PreparedStatement stm = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			stm.setString(1, name);
+			stm.setString(2, surname);
+			stm.setLong(3, date.toEpochDay());
+			stm.setString(4, specialization.name());
+			stm.executeUpdate();
+			
+			ResultSet generatedID = stm.getGeneratedKeys();
+			if(generatedID.next()){
+				int studentId = generatedID.getInt(1);
+				this.insertGrades(studentId, grades);
 			}
 		}
-		catch(SQLException e) {
-			e.printStackTrace();
-		}
-		return true;
-	}
+
 	
-	public boolean insertIntoTable() {
-		if(conn == null)
-			return false;
-		
-		String sql = "INSERT INTO students(name,surname,birthdate) VALUES(?,?,?)";
-		try(PreparedStatement stm = conn.prepareStatement(sql)) {
-			stm.setString(1, "Jan");
-			stm.setString(2, "Dobry");
-			stm.setDate(3, Date.valueOf(LocalDate.of(2000, 12, 5)));
+	private void insertGrades(int student_id, ArrayList<Integer> grades) throws SQLException {
+		String sql = "INSERT INTO grades(student_id,grade) VALUES (?,?)";
+		PreparedStatement stm = conn.prepareStatement(sql);
+		for(int grade: grades) {
+			stm.setInt(1, student_id);
+			stm.setInt(2, grade);
 			stm.executeUpdate();
-			System.out.println("Insert was succesful.");
-			
+			}
 		}
-		catch(SQLException e) {
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}
-	
-	public boolean createTable(){
+	public void createTable() throws SQLException{
 		
 		if(conn == null)
-			return false;
+			throw new SQLException("Connection was not estabilished.");
 		
 		String sql1 = "CREATE TABLE IF NOT EXISTS students ("
 				+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
 				+ "name VARCHAR(255) NOT NULL,"
 				+ "surname VARCHAR(255) NOT NULL,"
-				+ "birthdate DATE NOT NULL);";
+				+ "birthdate BIGINT NOT NULL,"
+				+ "specialization VARCHAR(255) NOT NULL);";
 		
 		String sql2 = "CREATE TABLE IF NOT EXISTS grades ("
 				+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -87,16 +92,8 @@ public class SQLDatabase {
 				+ "grade INTEGER NOT NULL,"
 				+ "FOREIGN KEY (student_id) REFERENCES students(id));";
 		
-		try(Statement stm = conn.createStatement()){
-			stm.execute(sql1);
-			System.out.println("first done.");
-			stm.execute(sql2);
-			System.out.println("Second done.");
-			
-		}
-		catch(SQLException e) {
-			e.printStackTrace();
-		}
-	return true;
+		Statement stm = conn.createStatement();
+		stm.execute(sql1);
+		stm.execute(sql2);
 	}
 }

@@ -1,17 +1,18 @@
 import java.util.ArrayList;
+import java.time.LocalDate;
 
 public abstract class Student implements Comparable<Student>{
 	
-	protected String first_name;
+	protected String firstName;
 	protected String surname;
-	protected String date_of_birth;
+	protected LocalDate dateOfBirth;
 	protected Specialization spec;
 	private ArrayList<Integer> grades;
 	
-	public Student(String first_name, String surname, String date_of_birth){
-		this.first_name = first_name;
+	public Student(String firstName, String surname, LocalDate dateOfBirth){
+		this.firstName = firstName;
 		this.surname = surname;
-		this.date_of_birth = date_of_birth;
+		this.dateOfBirth = dateOfBirth;
 		grades = new ArrayList<>();
 	}
 	
@@ -19,6 +20,28 @@ public abstract class Student implements Comparable<Student>{
 		grades.add(grade);
 	}
 	
+
+	public String getfirstName() {
+		return firstName;
+	}
+
+
+	public String getSurname() {
+		return surname;
+	}
+
+
+	public LocalDate getdateOfBirth() {
+		return dateOfBirth;
+	}
+	
+	public ArrayList<Integer> getGrades() {
+		return this.grades;
+	}
+	
+	public Specialization getSpecialization() {
+		return this.spec;
+	}
 
 	public double get_grade_point_average() {
 		double grade_sum = 0.0d;
@@ -31,7 +54,7 @@ public abstract class Student implements Comparable<Student>{
 	public abstract String do_skill();
 	
 	public String getAttributes() {
-		String aux = this.first_name + " " + this.surname + " " + this.date_of_birth + " " + this.spec + " [";
+		String aux = this.firstName + " " + this.surname + " " + this.dateOfBirth + " " + this.spec + " [";
 		
 		for(int grade : this.grades) {
 			aux += grade;
@@ -49,6 +72,6 @@ public abstract class Student implements Comparable<Student>{
 
 	@Override
 	public String toString() {
-		return "first name: " + this.first_name + ", surname: " + this.surname + ", date of birth: " + this.date_of_birth + ", grade point average: " + this.get_grade_point_average();
+		return "first name: " + this.firstName + ", surname: " + this.surname + ", date of birth: " + this.dateOfBirth + ", grade point average: " + this.get_grade_point_average();
 	}
 }

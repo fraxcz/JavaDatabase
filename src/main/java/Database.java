@@ -4,6 +4,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
 public class Database {
 	private ArrayList<Student> students;
 	
@@ -11,12 +14,7 @@ public class Database {
 		this.students = new ArrayList<>();
 	}
 	
-	public Database(String path) {
-		this.students = new ArrayList<>();
-		this.readFromAFile(path);
-	}
-	
-	public void add_student(String name, String surname, String date_of_birth, Specialization s) {
+	public void add_student(String name, String surname, LocalDate date_of_birth, Specialization s) {
 		
 		switch(s) {
 		case CyberSecurity:
@@ -29,7 +27,7 @@ public class Database {
 		}
 	}
 	
-	public int get_group_count(Specialization specialization) {
+	public int getGroupCount(Specialization specialization) {
 		int count = 0;
 		for(Student student: this.students) {
 			if (specialization == Specialization.CyberSecurity && student instanceof CyberSecurityStudent) {
@@ -42,15 +40,15 @@ public class Database {
 		return count;
 	}
 	
-	public String do_student_skill(int id) {
-		Student student = this.get_student(id);
+	public String doStudentSkill(int id) {
+		Student student = this.getStudent(id);
 		if(student == null) 
 			return "Wrong id.";
 		
 		return student.do_skill();
 	}
 	
-	public double get_average_of_specialization(Specialization specialization) {
+	public double getAverageOfSpecialization(Specialization specialization) {
 		
 		double sum = 0;
 		int count = 0;
@@ -67,11 +65,11 @@ public class Database {
 		return sum / count;
 	}
 	
-	public boolean add_grade(int id, int grade) {
+	public boolean addGrade(int id, int grade) {
 		if(grade < 1 || grade > 5)
 			return false;
 		
-		Student student = this.get_student(id);
+		Student student = this.getStudent(id);
 		
 		if(student == null)
 			return false;
@@ -80,7 +78,7 @@ public class Database {
 		return true;
 	}
 	
-	public Student get_student(int id){
+	public Student getStudent(int id){
 		try {
 			Student student = this.students.get(id);
 			return student;
@@ -90,8 +88,8 @@ public class Database {
 		}
 	}
 	
-	public boolean remove_student(int id) {
-		return students.remove(this.get_student(id));
+	public boolean removetudent(int id) {
+		return students.remove(this.getStudent(id));
 	}
 	
 	public String toStringSorted() {
@@ -121,6 +119,7 @@ public class Database {
 			String line;
 			String lineSplit[];
 			String grades[];
+			String birthDate[];
 			BufferedReader reader = new BufferedReader(new FileReader(path));
 			
 			while((line = reader.readLine()) != null) {
@@ -128,18 +127,19 @@ public class Database {
 				line = line.replaceAll("[\\[\\]]", "");
 				lineSplit = line.split(" ");
 				grades = lineSplit[4].split(",");
-				
+				birthDate = lineSplit[3].split("-");
+				LocalDate ld = LocalDate.of(Integer.valueOf(birthDate[0]), Integer.valueOf(birthDate[1]), Integer.valueOf(birthDate[2]));
 				switch(lineSplit[3]) {
 				
 				case "CyberSecurity":
-					Student studentC = new CyberSecurityStudent(lineSplit[0], lineSplit[1], lineSplit[2]);
+					Student studentC = new CyberSecurityStudent(lineSplit[0], lineSplit[1], ld);
 					for(String grade: grades)
 						studentC.addGrade(Integer.parseInt(grade));
 					this.students.add(studentC);
 					break;
 					
 				case "Telecom":
-					Student studentT = new TelecommunicationStudent(lineSplit[0], lineSplit[1], lineSplit[2]);
+					Student studentT = new TelecommunicationStudent(lineSplit[0], lineSplit[1], ld);
 					
 					for(String grade: grades)
 						studentT.addGrade(Integer.parseInt(grade));
@@ -156,6 +156,65 @@ public class Database {
 			System.out.println("Could't load every student in a file, missing arguments !");
 		}
 	}
+	
+	public void createDatabase() throws SQLException {
+		SQLDatabase db = new SQLDatabase();
+		db.connect();
+		db.createTable();
+		db.disconnect();
+	}
+	
+	public void saveToADatabase() throws SQLException {
+		SQLDatabase db = new SQLDatabase();
+		if(!db.connect())
+			return;
+		for(Student student: students) {
+				db.insertStudent(student.getfirstName(), student.getSurname(), student.getdateOfBirth(), student.getSpecialization(), student.getGrades());
+			}
+		db.disconnect();
+		}
+	
+	public void loadFromADatabase() throws SQLException {
+		SQLDatabase db = new SQLDatabase();
+		if(!db.connect()) {
+			System.out.println("chyba.");
+			return;
+		}
+		
+		ResultSet rs = db.getStudentsAndGrades();
+		String grades[];
+		Student student;
+		
+		while(rs.next()) {
+			switch(rs.getString("specialization")) {
+			case ("CyberSecurity"):
+				student = new CyberSecurityStudent(rs.getString("name"), rs.getString("surname"), LocalDate.ofEpochDay(rs.getInt("birthdate")));
+				grades = rs.getString("grades").split(",");
+				
+				for (String grade: grades) {
+					student.addGrade(Integer.valueOf(grade));
+				}
+				this.students.add(student);
+				break;
+			
+			case ("Telecom"):
+				student = new TelecommunicationStudent(rs.getString("name"), rs.getString("surname"), LocalDate.ofEpochDay(rs.getInt("birthdate")));
+				grades = rs.getString("grades").split(",");
+				
+				for (String grade: grades) {
+					student.addGrade(Integer.valueOf(grade));
+				}
+				this.students.add(student);
+				break;
+
+			default:
+				System.out.println("Student specialization has not been found. Student wasn't loaded.");
+				break;
+			}
+		}
+		db.disconnect();
+	}
+		
 	
 	@Override
 	public String toString() {

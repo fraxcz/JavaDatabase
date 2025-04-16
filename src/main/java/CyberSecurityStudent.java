@@ -1,10 +1,11 @@
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class CyberSecurityStudent extends Student {
 
-	public CyberSecurityStudent(String first_name, String surname, String date_of_birth) {
+	public CyberSecurityStudent(String first_name, String surname, LocalDate date_of_birth) {
 		super(first_name, surname, date_of_birth);
 		this.spec = Specialization.CyberSecurity;
 	}
@@ -13,7 +14,7 @@ public class CyberSecurityStudent extends Student {
 	public String do_skill() {
 		try {
 			MessageDigest digest = MessageDigest.getInstance("SHA-256");
-			String fullname = this.first_name + this.surname;
+			String fullname = this.firstName + this.surname;
 			byte[] hashed_fullname = digest.digest(fullname.getBytes());
 			BigInteger bigInt = new BigInteger(1, hashed_fullname);
 			return bigInt.toString(16);
