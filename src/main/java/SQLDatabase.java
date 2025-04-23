@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Date;
 import java.time.LocalDate;
 
 public class SQLDatabase {
@@ -43,6 +42,19 @@ public class SQLDatabase {
 		ResultSet rsStudent = stm.executeQuery(sql);
 		return rsStudent;
 
+	}
+	
+	public void deleteAllStudentsAndGrades() throws SQLException{
+		if(conn == null)
+			throw new SQLException("Connection was not estabilished.");
+		
+		String sql1 = "DELETE FROM students";
+		String sql2 = "DELETE FROM grades";
+		
+		Statement stm = conn.createStatement();
+		stm.executeUpdate(sql1);
+		stm.executeUpdate(sql2);
+		
 	}
 	
 	public void insertStudent(String name, String surname, LocalDate date, Specialization specialization, ArrayList<Integer> grades) throws SQLException {

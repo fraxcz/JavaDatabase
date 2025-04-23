@@ -56,9 +56,10 @@ public abstract class Student implements Comparable<Student>{
 	public String getAttributes() {
 		String aux = this.firstName + " " + this.surname + " " + this.dateOfBirth + " " + this.spec + " [";
 		
-		for(int grade : this.grades) {
-			aux += grade;
-			if(this.grades.size() - 1 > this.grades.indexOf(grade))
+		for(int i = 0; i < this.grades.size(); i++){
+			aux += this.grades.get(i);
+			
+			if(i < this.grades.size() - 1)
 				aux += ",";
 		}
 		aux += "]";

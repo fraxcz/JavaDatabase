@@ -21,7 +21,7 @@ public class Database {
 			students.add(new CyberSecurityStudent(name, surname, date_of_birth));
 			break;
 			
-		case Telecom:
+		case Telecommunication:
 			students.add(new TelecommunicationStudent(name, surname, date_of_birth));
 			break;
 		}
@@ -33,7 +33,7 @@ public class Database {
 			if (specialization == Specialization.CyberSecurity && student instanceof CyberSecurityStudent) {
 	            count++;
 	            
-	        } else if (specialization == Specialization.Telecom && student instanceof TelecommunicationStudent) {
+	        } else if (specialization == Specialization.Telecommunication && student instanceof TelecommunicationStudent) {
 	            count++;
 	        }
 		}
@@ -57,7 +57,7 @@ public class Database {
 	            sum += student.get_grade_point_average();
 	            count++;
 	            
-	        } else if (specialization == Specialization.Telecom && student instanceof TelecommunicationStudent) {
+	        } else if (specialization == Specialization.Telecommunication && student instanceof TelecommunicationStudent) {
 	        	sum += student.get_grade_point_average();
 	        	count++;
 	        }
@@ -102,20 +102,14 @@ public class Database {
 		}
 		return aux;
 	}
-	public void writeToAFile(int id, String path) {
-		try {
+	public void writeToAFile(int id, String path) throws IOException{
+		
 			BufferedWriter writer = new BufferedWriter(new FileWriter(path));
 			writer.write(this.students.get(id).getAttributes() + "\n");
 			writer.close();
-			System.out.println("Succesfully saved a student to " + path);
-		}
-			catch(IOException e) {
-				e.printStackTrace();
-			}
 	}
 
-	public void readFromAFile(String path) {
-		try {
+	public void readFromAFile(String path) throws IOException{
 			String line;
 			String lineSplit[];
 			String grades[];
@@ -127,7 +121,7 @@ public class Database {
 				line = line.replaceAll("[\\[\\]]", "");
 				lineSplit = line.split(" ");
 				grades = lineSplit[4].split(",");
-				birthDate = lineSplit[3].split("-");
+				birthDate = lineSplit[2].split("-");
 				LocalDate ld = LocalDate.of(Integer.valueOf(birthDate[0]), Integer.valueOf(birthDate[1]), Integer.valueOf(birthDate[2]));
 				switch(lineSplit[3]) {
 				
@@ -138,7 +132,7 @@ public class Database {
 					this.students.add(studentC);
 					break;
 					
-				case "Telecom":
+				case "Telecommunication":
 					Student studentT = new TelecommunicationStudent(lineSplit[0], lineSplit[1], ld);
 					
 					for(String grade: grades)
@@ -149,25 +143,22 @@ public class Database {
 			}
 			reader.close();
 		}
-		catch(IOException e) {
-			e.printStackTrace();
-		}
-		catch(IndexOutOfBoundsException e) {
-			System.out.println("Could't load every student in a file, missing arguments !");
-		}
-	}
 	
 	public void createDatabase() throws SQLException {
 		SQLDatabase db = new SQLDatabase();
-		db.connect();
+		if(!db.connect())
+			throw new SQLException("Connection wasn't estabilished.");
 		db.createTable();
 		db.disconnect();
 	}
 	
 	public void saveToADatabase() throws SQLException {
 		SQLDatabase db = new SQLDatabase();
+		
 		if(!db.connect())
-			return;
+			throw new SQLException("Connection wasn't estabilished.");
+		db.deleteAllStudentsAndGrades();
+		
 		for(Student student: students) {
 				db.insertStudent(student.getfirstName(), student.getSurname(), student.getdateOfBirth(), student.getSpecialization(), student.getGrades());
 			}
@@ -177,8 +168,7 @@ public class Database {
 	public void loadFromADatabase() throws SQLException {
 		SQLDatabase db = new SQLDatabase();
 		if(!db.connect()) {
-			System.out.println("chyba.");
-			return;
+			throw new SQLException("Connection wasn't estabilished.");
 		}
 		
 		ResultSet rs = db.getStudentsAndGrades();
@@ -197,7 +187,7 @@ public class Database {
 				this.students.add(student);
 				break;
 			
-			case ("Telecom"):
+			case ("Telecommunication"):
 				student = new TelecommunicationStudent(rs.getString("name"), rs.getString("surname"), LocalDate.ofEpochDay(rs.getInt("birthdate")));
 				grades = rs.getString("grades").split(",");
 				
