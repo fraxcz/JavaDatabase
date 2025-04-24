@@ -45,6 +45,10 @@ public abstract class Student implements Comparable<Student>{
 
 	public double get_grade_point_average() {
 		double grade_sum = 0.0d;
+		
+		if(this.grades.size() == 0)
+			return 0.0d;
+		
 		for(int grades: grades) {
 			grade_sum += grades;
 		}

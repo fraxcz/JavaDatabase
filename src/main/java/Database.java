@@ -54,12 +54,17 @@ public class Database {
 		int count = 0;
 		for(Student student: this.students) {
 			if (specialization == Specialization.CyberSecurity && student instanceof CyberSecurityStudent) {
-	            sum += student.get_grade_point_average();
-	            count++;
+				
+				if(student.get_grade_point_average() != 0.0d) {
+					sum += student.get_grade_point_average();
+		            count++;
+				}
 	            
 	        } else if (specialization == Specialization.Telecommunication && student instanceof TelecommunicationStudent) {
-	        	sum += student.get_grade_point_average();
-	        	count++;
+	        	if(student.get_grade_point_average() != 0.0d) {
+					sum += student.get_grade_point_average();
+		            count++;
+	        	}
 	        }
 		}
 		return sum / count;
@@ -112,7 +117,7 @@ public class Database {
 	public void readFromAFile(String path) throws IOException{
 			String line;
 			String lineSplit[];
-			String grades[];
+			String grades[] = {};
 			String birthDate[];
 			BufferedReader reader = new BufferedReader(new FileReader(path));
 			
@@ -120,15 +125,20 @@ public class Database {
 				
 				line = line.replaceAll("[\\[\\]]", "");
 				lineSplit = line.split(" ");
-				grades = lineSplit[4].split(",");
+				try {
+					grades = lineSplit[4].split(",");
+				}
+				catch(ArrayIndexOutOfBoundsException e) {
+				}
+				
 				birthDate = lineSplit[2].split("-");
 				LocalDate ld = LocalDate.of(Integer.valueOf(birthDate[0]), Integer.valueOf(birthDate[1]), Integer.valueOf(birthDate[2]));
 				switch(lineSplit[3]) {
 				
 				case "CyberSecurity":
 					Student studentC = new CyberSecurityStudent(lineSplit[0], lineSplit[1], ld);
-					for(String grade: grades)
-						studentC.addGrade(Integer.parseInt(grade));
+						for(String grade: grades)
+							studentC.addGrade(Integer.parseInt(grade));
 					this.students.add(studentC);
 					break;
 					
@@ -209,7 +219,6 @@ public class Database {
 		db.disconnect();
 	}
 		
-	
 	@Override
 	public String toString() {
 		String aux = "";
