@@ -92,14 +92,14 @@ public class SQLDatabase {
 			throw new SQLException("Connection was not estabilished.");
 		
 		String sql1 = "CREATE TABLE IF NOT EXISTS students ("
-				+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+				+ "id INTEGER PRIMARY KEY,"
 				+ "name VARCHAR(255) NOT NULL,"
 				+ "surname VARCHAR(255) NOT NULL,"
 				+ "birthdate BIGINT NOT NULL,"
 				+ "specialization VARCHAR(255) NOT NULL);";
 		
 		String sql2 = "CREATE TABLE IF NOT EXISTS grades ("
-				+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+				+ "id INTEGER PRIMARY KEY,"
 				+ "student_id INTEGER NOT NULL,"
 				+ "grade INTEGER NOT NULL,"
 				+ "FOREIGN KEY (student_id) REFERENCES students(id));";

@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -54,6 +55,10 @@ public class Main {
 				}
 				catch(NumberFormatException e) {
 					System.out.println("Date of birth require numbers!");
+					break;
+				}
+				catch(DateTimeException e) {
+					System.out.println(e.getMessage());
 					break;
 				}
 				specialization = sc.next().toLowerCase();

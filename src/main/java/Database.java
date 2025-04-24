@@ -179,11 +179,15 @@ public class Database {
 			switch(rs.getString("specialization")) {
 			case ("CyberSecurity"):
 				student = new CyberSecurityStudent(rs.getString("name"), rs.getString("surname"), LocalDate.ofEpochDay(rs.getInt("birthdate")));
-				grades = rs.getString("grades").split(",");
-				
-				for (String grade: grades) {
-					student.addGrade(Integer.valueOf(grade));
+				try {
+					grades = rs.getString("grades").split(",");
+					for (String grade: grades) {
+						student.addGrade(Integer.valueOf(grade));
+					}
 				}
+				catch(NullPointerException e) {
+				}
+				
 				this.students.add(student);
 				break;
 			
