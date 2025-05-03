@@ -37,7 +37,7 @@ public class SQLDatabase {
 		if(conn == null)
 			return null;
 
-		String sql = "SELECT *, GROUP_CONCAT(grades.grade) AS grades FROM students LEFT JOIN grades ON grades.student_id = students.id GROUP BY students.id;";
+		String sql = "SELECT *, GROUP_CONCAT(grades.grade ORDER BY grades.id ASC) AS grades FROM students LEFT JOIN grades ON grades.student_id = students.id GROUP BY students.id;";
 		Statement stm = conn.createStatement();
 		ResultSet rsStudent = stm.executeQuery(sql);
 		return rsStudent;

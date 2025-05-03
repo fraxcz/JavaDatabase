@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.dobraorg</groupId>
   <artifactId>JavaDB</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.0.0</version>
   <packaging>jar</packaging>
   <properties>
   	<maven.compiler.source>1.8</maven.compiler.source>
@@ -15,12 +15,6 @@
     		<groupId>org.xerial</groupId>
     		<artifactId>sqlite-jdbc</artifactId>
     		<version>3.49.1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
-			<scope>test</scope>
 		</dependency>
   </dependencies>
   <build>

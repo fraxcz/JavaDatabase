@@ -66,16 +66,16 @@ public class Main {
 				switch(specialization) {
 				case "telecommunication":
 					db.add_student(name, surname, date, Specialization.Telecommunication);
+					System.out.println("Student added successfully.");
 					break;
 				case "cybersecurity":
 					db.add_student(name, surname, date, Specialization.CyberSecurity);
+					System.out.println("Student added successfully.");
 					break;
 				default:
 					System.out.println("Invalid specialization.");
 					break;
-	
 				}
-				System.out.println("Student added successfully.");
 				break;
 				
 			case "2":
